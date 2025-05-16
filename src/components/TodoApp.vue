@@ -85,12 +85,19 @@
             >미완료: {{ activeCount }}개</span
           >
         </div>
-        <button
-          @click="clearCompleted"
-          v-if="completedCount > 0"
-          class="px-5 py-2.5 text-xs bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200 font-medium">
-          완료된 항목 삭제
-        </button>
+        <div class="flex gap-3">
+          <button
+            @click="clearCompleted"
+            v-if="completedCount > 0"
+            class="px-5 py-2.5 text-xs bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200 font-medium">
+            완료된 항목 삭제
+          </button>
+          <button
+            @click="clearAll"
+            class="px-5 py-2.5 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition duration-200 font-medium">
+            모든 항목 삭제
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -136,6 +143,30 @@ onMounted(() => {
   const savedTodos = localStorage.getItem("vue-todos");
   if (savedTodos) {
     todos.value = JSON.parse(savedTodos);
+  } else {
+    // 기본 Todo 항목 설정
+    todos.value = [
+      {
+        id: Date.now(),
+        text: "Vue 문법 학습하기",
+        completed: false,
+        editing: false,
+      },
+      {
+        id: Date.now() + 1,
+        text: "상태관리 (Pinia/Vuex) 알아보기",
+        completed: false,
+        editing: false,
+      },
+      {
+        id: Date.now() + 2,
+        text: "SSR과 Nuxt.js 살펴보기",
+        completed: false,
+        editing: false,
+      },
+    ];
+    // 새로 생성한 기본 Todo 항목들을 로컬 스토리지에 저장
+    localStorage.setItem("vue-todos", JSON.stringify(todos.value));
   }
 });
 
@@ -210,6 +241,11 @@ const cancelEditing = (index: number) => {
 // 완료된 항목 모두 삭제
 const clearCompleted = () => {
   todos.value = todos.value.filter((todo) => !todo.completed);
+};
+
+// 모든 항목 삭제
+const clearAll = () => {
+  todos.value = [];
 };
 
 // 계산된 속성 (computed)
