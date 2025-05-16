@@ -4,10 +4,8 @@ import TodoApp from "./components/TodoApp.vue";
 
 <template>
   <div
-    class="min-h-screen bg-gray-100 py-8 flex flex-col justify-center items-center">
-    <div class="w-full max-w-md mx-auto px-4">
-      <TodoApp />
-    </div>
+    class="min-h-screen bg-gray-100 flex items-center justify-center w-screen">
+    <TodoApp />
   </div>
 </template>
 

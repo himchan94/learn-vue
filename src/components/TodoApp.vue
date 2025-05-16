@@ -1,52 +1,52 @@
 <template>
-  <div
-    class="bg-white shadow-xl rounded-lg max-w-2xl mx-auto my-10 overflow-hidden">
+  <div class="bg-white shadow-xl rounded-lg max-w-4xl mx-auto">
     <!-- 헤더 섹션 -->
-    <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-7">
-      <h1 class="text-2xl font-bold text-center text-white">Vue Todo 앱</h1>
+    <div class="bg-gradient-to-r from-green-500 to-green-600 px-10 py-8">
+      <h1 class="text-3xl font-bold text-center text-white">Vue Todo 앱</h1>
     </div>
 
-    <div class="p-8 md:p-10">
+    <div class="flex mb-16 h-full px-2 py-2">
+      <input
+        v-model="newTodoText"
+        @keyup.enter="addTodo"
+        placeholder="할일을 입력하세요"
+        class="flex-1 border border-gray-300 p-3 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm" />
+      <button
+        @click="addTodo"
+        class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-r-md transition duration-200 shadow-sm">
+        추가
+      </button>
+    </div>
+
+    <div class="p-6 h-full">
       <!-- 할일 추가 폼 -->
-      <div class="flex mb-10">
-        <input
-          v-model="newTodoText"
-          @keyup.enter="addTodo"
-          placeholder="할일을 입력하세요"
-          class="flex-1 border border-gray-300 p-4 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm" />
-        <button
-          @click="addTodo"
-          class="bg-green-500 hover:bg-green-600 text-white px-6 py-4 rounded-r-md transition duration-200 shadow-sm">
-          추가
-        </button>
-      </div>
 
       <!-- 할일 목록 -->
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-6">
         <div
           v-if="todos.length === 0"
-          class="text-center py-12 text-gray-500 bg-gray-50 rounded-lg">
+          class="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
           할일이 없습니다. 새로운 할일을 추가해보세요!
         </div>
 
         <div
           v-for="(todo, index) in todos"
           :key="todo.id"
-          class="flex gap-4 items-center p-5 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200 shadow-sm"
+          class="flex gap-5 items-center p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200 shadow-sm"
           :class="{ 'bg-gray-100 opacity-75': todo.completed }">
           <!-- 완료 체크박스 -->
-          <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center ml-1">
             <input
               type="checkbox"
               v-model="todo.completed"
-              class="h-6 w-6 text-green-500 border-2 border-gray-300 rounded-md focus:ring-green-400 focus:ring-2 cursor-pointer" />
+              class="h-5 w-5 text-green-500 border-2 border-gray-300 rounded-md focus:ring-green-400 focus:ring-1 cursor-pointer" />
           </div>
 
           <!-- 할일 텍스트 (수정 모드가 아닐 때) -->
           <span
             v-if="!todo.editing"
             @dblclick="startEditing(index)"
-            class="flex-1 mx-3 cursor-pointer text-gray-800 text-base"
+            class="flex-1 mx-2 cursor-pointer text-gray-800 text-base"
             :class="{ 'line-through text-gray-400': todo.completed }">
             {{ todo.text }}
           </span>
@@ -59,12 +59,12 @@
             @keyup.enter="finishEditing(index)"
             @keyup.esc="cancelEditing(index)"
             v-focus
-            class="flex-1 mx-3 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm" />
+            class="flex-1 mx-2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 shadow-sm" />
 
           <!-- 삭제 버튼 -->
           <button
             @click="removeTodo(index)"
-            class="ml-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm transition duration-200">
+            class="ml-2 px-4 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-md text-xs transition duration-200">
             삭제
           </button>
         </div>
@@ -73,7 +73,7 @@
       <!-- 할일 통계 -->
       <div
         v-if="todos.length > 0"
-        class="mt-10 flex justify-between items-center bg-gray-50 p-6 rounded-md text-sm shadow-sm">
+        class="mt-16 flex justify-between items-center bg-gray-50 p-4 rounded-md text-sm shadow-sm">
         <div class="flex gap-6">
           <span class="text-gray-600 font-medium"
             >전체: {{ todos.length }}개</span
@@ -89,12 +89,12 @@
           <button
             @click="clearCompleted"
             v-if="completedCount > 0"
-            class="px-5 py-2.5 text-xs bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200 font-medium">
+            class="px-4 py-1.5 text-xs bg-gray-200 hover:bg-gray-300 rounded-md transition duration-200 font-medium">
             완료된 항목 삭제
           </button>
           <button
             @click="clearAll"
-            class="px-5 py-2.5 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition duration-200 font-medium">
+            class="px-4 py-1.5 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition duration-200 font-medium">
             모든 항목 삭제
           </button>
         </div>
@@ -141,7 +141,7 @@ const newTodoText = ref("");
 // 로컬 스토리지에서 데이터 불러오기
 onMounted(() => {
   const savedTodos = localStorage.getItem("vue-todos");
-  if (savedTodos) {
+  if (savedTodos?.length && savedTodos !== "[]") {
     todos.value = JSON.parse(savedTodos);
   } else {
     // 기본 Todo 항목 설정
@@ -174,7 +174,11 @@ onMounted(() => {
 watch(
   todos,
   (newTodos) => {
-    localStorage.setItem("vue-todos", JSON.stringify(newTodos));
+    if (newTodos.length > 0) {
+      localStorage.setItem("vue-todos", JSON.stringify(newTodos));
+    } else {
+      localStorage.removeItem("vue-todos");
+    }
   },
   { deep: true }
 );
@@ -264,22 +268,3 @@ defineExpose({
   },
 });
 </script>
-
-<style>
-/* 직접 스타일링을 추가하거나 Tailwind 유틸리티 클래스를 사용합니다 */
-.todo-app-custom {
-  @apply bg-white shadow-lg rounded-lg p-8 w-full;
-}
-
-.todo-input {
-  @apply flex-1 border border-gray-300 p-3 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent;
-}
-
-.add-button {
-  @apply bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-r-md transition duration-200;
-}
-
-.delete-button {
-  @apply ml-3 px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm transition duration-200;
-}
-</style>
